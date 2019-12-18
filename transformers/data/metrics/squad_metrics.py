@@ -469,7 +469,7 @@ def compute_predictions_logits(
         for pred in prelim_predictions:
             if len(nbest) >= n_best_size:
                 break
-            logger.info('Feature index is: {}'.format(pred.feature_index))    
+            #logger.info('Feature index is: {}'.format(pred.feature_index))    
             feature = features[pred.feature_index]
             if pred.start_index > 0:  # this is a non-null prediction
                 tok_tokens = feature.tokens[pred.start_index:(pred.end_index + 1)]
