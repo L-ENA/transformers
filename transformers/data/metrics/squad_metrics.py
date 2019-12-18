@@ -382,7 +382,8 @@ def compute_predictions_logits(
     """Write final predictions to the json file and log-odds of null if needed."""
     logger.info("Writing predictions to: %s" % (output_prediction_file))
     logger.info("Writing nbest to: %s" % (output_nbest_file))
-
+    logger.info("Nbest size is: {}".format(n_best_size))
+    
     example_index_to_features = collections.defaultdict(list)
     for feature in all_features:
         example_index_to_features[feature.example_index].append(feature)
@@ -468,6 +469,7 @@ def compute_predictions_logits(
         for pred in prelim_predictions:
             if len(nbest) >= n_best_size:
                 break
+            logger.info('Feature index is: {}'.format(pred.feature_index))    
             feature = features[pred.feature_index]
             if pred.start_index > 0:  # this is a non-null prediction
                 tok_tokens = feature.tokens[pred.start_index:(pred.end_index + 1)]
