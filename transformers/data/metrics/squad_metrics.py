@@ -235,7 +235,7 @@ def squad_evaluate(examples, preds, no_answer_probs=None, no_answer_probability_
     if no_answer_probs:
         find_all_best_thresh(evaluation, preds, exact, f1, no_answer_probs, qas_id_to_has_answer)
         
-    logger.info(classification_report(examples, preds))
+    
     return evaluation
 
 
