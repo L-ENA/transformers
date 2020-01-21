@@ -67,8 +67,36 @@ def compute_f1(a_gold, a_pred):
     f1 = (2 * precision * recall) / (precision + recall)
     
     
-    return [f1, precision, recall]
+    return f1
+def compute_precision(a_gold, a_pred):
+    gold_toks = get_tokens(a_gold)
+    pred_toks = get_tokens(a_pred)
+    
+    common = collections.Counter(gold_toks) & collections.Counter(pred_toks)
+    num_same = sum(common.values())
+    if len(gold_toks) == 0 or len(pred_toks) == 0:
+        # If either is no-answer, then F1 is 1 if they agree, 0 otherwise
+        return int(gold_toks == pred_toks)
+    if num_same == 0:
+        return 0
+    precision = 1.0 * num_same / len(pred_toks)
+    
+    return precision
 
+def compute_recall(a_gold, a_pred):
+    gold_toks = get_tokens(a_gold)
+    pred_toks = get_tokens(a_pred)
+    
+    common = collections.Counter(gold_toks) & collections.Counter(pred_toks)
+    num_same = sum(common.values())
+    if len(gold_toks) == 0 or len(pred_toks) == 0:
+        # If either is no-answer, then F1 is 1 if they agree, 0 otherwise
+        return int(gold_toks == pred_toks)
+    if num_same == 0:
+        return 0
+    recall = 1.0 * num_same / len(gold_toks)
+    
+    return recall
 
 def get_raw_scores(examples, preds):
     """
@@ -93,10 +121,12 @@ def get_raw_scores(examples, preds):
 
         prediction = preds[qas_id]
         exact_scores[qas_id] = max(compute_exact(a, prediction) for a in gold_answers)
-        f1_scores[qas_id] = max(compute_f1(a, prediction)[0] for a in gold_answers)
         
-        precision_scores[qas_id] = max(compute_f1(a, prediction)[1] for a in gold_answers)
-        recall_scores[qas_id] = max(compute_f1(a, prediction)[2] for a in gold_answers)
+        
+        f1_scores[qas_id] = max(compute_f1(a, prediction) for a in gold_answers)
+        
+        precision_scores[qas_id] = max(compute_precision(a, prediction) for a in gold_answers)
+        recall_scores[qas_id] = max(compute_recall(a, prediction) for a in gold_answers)
 
     return exact_scores, f1_scores,precision_scores,recall_scores
 
