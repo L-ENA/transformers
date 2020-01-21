@@ -65,7 +65,7 @@ def compute_f1(a_gold, a_pred):
     recall = 1.0 * num_same / len(gold_toks)
     
     f1 = (2 * precision * recall) / (precision + recall)
-    logger.info(classification_report(gold_toks,pred_toks))
+    
     
     return f1
 
@@ -234,7 +234,8 @@ def squad_evaluate(examples, preds, no_answer_probs=None, no_answer_probability_
 
     if no_answer_probs:
         find_all_best_thresh(evaluation, preds, exact, f1, no_answer_probs, qas_id_to_has_answer)
-
+        
+    logger.info(classification_report(examples, preds))
     return evaluation
 
 
