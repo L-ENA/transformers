@@ -598,6 +598,7 @@ def compute_predictions_logits(
             score_diff = score_null - best_non_null_entry.start_logit - (
                 best_non_null_entry.end_logit)
             scores_diff_json[example.qas_id] = score_diff
+            print(" score_null is {}, Score diff for this example is {}, best start logit is {} and best end logit is {}".format(score_null, score_diff, best_non_null_entry.start_logit, best_non_null_entry.end_logit))
             if score_diff > null_score_diff_threshold:
                 all_predictions[example.qas_id] = ""
             else:
