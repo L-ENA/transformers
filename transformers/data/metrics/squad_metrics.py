@@ -462,11 +462,15 @@ def compute_predictions_logits(
             # if we could have irrelevant answers, get the min score of irrelevant
             if version_2_with_negative:
                 feature_null_score = result.start_logits[0] + result.end_logits[0]
+                
                 if feature_null_score < score_null:
+                    print("Start is {}, end is {}, and feature score is {}".format(result.start_logits[0],result.end_logits[0],feature_null_score))
+                    
                     score_null = feature_null_score
                     min_null_feature_index = feature_index
                     null_start_logit = result.start_logits[0]
                     null_end_logit = result.end_logits[0]
+                    
             for start_index in start_indexes:
                 for end_index in end_indexes:
                     # We could hypothetically create invalid predictions, e.g., predict
@@ -599,6 +603,7 @@ def compute_predictions_logits(
                 best_non_null_entry.end_logit)
             scores_diff_json[example.qas_id] = score_diff
             print(" score_null is {}, Score diff for this example is {}, best start logit is {} and best end logit is {}".format(score_null, score_diff, best_non_null_entry.start_logit, best_non_null_entry.end_logit))
+            print("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx")
             if score_diff > null_score_diff_threshold:
                 all_predictions[example.qas_id] = ""
             else:
